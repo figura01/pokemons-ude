@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Pokemon } from '../pokemon';
-import { POKEMONS } from '../mock-pockemons';
+// import { POKEMONS } from '../mock-pokemons';
+
+import { PokemonsService } from '../pokemons.service';
 
 import { Router } from '@angular/router';
 
@@ -8,18 +10,24 @@ import { Router } from '@angular/router';
   // tslint:disable-next-line:component-selector
   selector: 'list-pokemon',
   templateUrl: './list-pokemon.component.html',
-  styleUrls: ['./list-pokemon.component.css']
+  styleUrls: ['./list-pokemon.component.css'],
+  providers: [PokemonsService]
 })
 
 export class ListPokemonComponent {
 
   private pokemons: Pokemon[] = null;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private pokemonsService: PokemonsService) {}
 
   // tslint:disable-next-line:use-life-cycle-interface
   ngOnInit() {
-    this.pokemons = POKEMONS;
+    this.getPokemons();
+  }
+
+  getPokemons(): void {
+    this.pokemonsService.getPokemons()
+    .subscribe(pokemons => this.pokemons = pokemons)
   }
 
   selectPokemon(pokemon: Pokemon) {
